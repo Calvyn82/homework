@@ -1,8 +1,8 @@
 require "io/console"
 
 VACUUM  = " "
-VAPOR   = "."
-FROST   = "*"
+VAPOR   = "\e[34;1m.\e[0m"
+FROST   = "\e[37;1m*\e[0m"
 VAPOR_PERCENTAGE = 30
 
 class Grid
@@ -27,7 +27,7 @@ class Grid
     @grid[rows/2][cols/2] = FROST
   end
 
-  attr_reader :grid
+  attr_reader :grid, :rows, :cols
 
   def to_s
     grid.map { |row| row.join }.join("\n")
@@ -37,55 +37,51 @@ class Grid
     false
   end
 
-  def create_neighborhoods
-    neighborhoods = Hash.new
-    grid.each_with_index do |row, y|
-      if y.even?
-        row.each_with_index do |cell, x|
-          if x.even?
-            neighborhoods["n(#{x},#{y})"] = [[cell]]
-            neighborhoods["n(#{x},#{y})"].first << grid[y][x + 1]
-            neighborhoods["n(#{x},#{y})"] << [grid[y + 1][x]]
-            neighborhoods["n(#{x},#{y})"].last << grid[y + 1][x + 1]
-          end
-        end
-      end
-    end
-    return neighborhoods
-  end
-
-  def freeze_neighborhoods
-    neighborhoods = create_neighborhoods
-    neighborhoods.keys.each do |key|
-      value = neighborhoods[key]
-      if value.flatten.include?(FROST)
-        neighborhoods[key].each_index do |y|
-          neighborhoods[key][y].each_index do |x|
-            if neighborhoods[key][y][x] == VAPOR
-              neighborhoods[key][y][x] = FROST
-            end
-          end
-        end
-      end
-    end
-    return neighborhoods["n(46,22)"]
-  end
-
   def tick
-    freeze_neighborhoods
-    #
+    (0..(rows/2)).step(2) { |y| 
+      (0..(cols/2)).step(2) { |x|
+        neighborhood = Neighborhood.new(x, y, grid)
+        if neighborhood.has_frost?
+          neighborhood.freeze
+        end
+      }}
+  end
+end
 
+class Neighborhood
+  def initialize(x, y, grid)
+    @x = x
+    @y = y
+    @grid = grid
   end
 
+  attr_reader :x, :y, :grid
+
+  def xys
+    [[x,y], [x+1,y], [x,y+1], [x+1,y+1]]
+  end
+
+  def has_frost?
+    xys.any? do |x, y|
+      grid[y][x] == FROST
+    end
+  end
+
+  def freeze
+    xys.each do |x, y|
+      if grid[y][x] == VAPOR
+        grid[y][x] = FROST
+      end
+    end
+  end
 end
 
 rows, cols = IO.console.winsize
 screen = Grid.new(rows, cols)
 
-#until screen.frozen?
-#  puts screen
-#  screen.tick
-#  sleep 1
-#end
+until screen.frozen?
+  puts screen
+  screen.tick
+  sleep 1
+end
 
-p screen.freeze_neighborhoods
