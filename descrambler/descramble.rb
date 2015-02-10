@@ -1,19 +1,3 @@
-class Dictionary
-  def initialize(filename = "/usr/share/dict/words")
-    @filename = filename
-  end
-
-  attr_reader :filename
-
-  def import
-    dictionary = Array.new
-    File.foreach(filename) do |word|
-        dictionary << word
-    end
-    return dictionary
-  end
-end
-
 class Reader
   def initialize(statement)
     @statement = statement.chars
@@ -29,17 +13,17 @@ class Reader
 end
 
 class Scanner
-  def initialize(statement)
+  def initialize(statement, filename = "/usr/share/dict/words")
     @statement  = statement
+    @filename   = filename
   end
 
-  attr_reader :statement
+  attr_reader :statement, :filename
 
   def run
     list        = Reader.new(statement).permutations
-    dictionary  = Dictionary.new.import
     hits        = Array.new
-    dictionary.each do |word|
+    File.foreach(filename) do |word|
       if list.include?(word.strip)
         hits << word
       end
@@ -47,8 +31,6 @@ class Scanner
     return hits
   end
 end
-
-
 
 statement = ARGV.last
 puts Scanner.new(statement).run
