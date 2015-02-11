@@ -17,34 +17,32 @@ class Grid
       @cols -= 1
     end
     
-    @grid = Array.new(@rows) { Array.new(@cols) {
+    @cells = Array.new(@rows) { Array.new(@cols) {
       if rand(1..100) <= VAPOR_PERCENTAGE
         VAPOR
       else
         VACUUM
       end
     } }
-    @grid[rows/2][cols/2] = FROST
+    @cells[rows/2][cols/2] = FROST
   end
 
-  attr_reader :grid, :rows, :cols
+  attr_reader :cells, :rows, :cols
+
+  def [](x,y)
+    cells[y][x]
+  end
+
+  def []=(x, y, cell)
+    cells[y][x] = cell
+  end
 
   def to_s
-    grid.map { |row| row.join }.join("\n")
+    cells.map { |row| row.join }.join("\n")
   end
 
   def frozen?
-    false
-  end
-
-  def tick
-    (0..(rows/2)).step(2) { |y| 
-      (0..(cols/2)).step(2) { |x|
-        neighborhood = Neighborhood.new(x, y, grid)
-        if neighborhood.has_frost?
-          neighborhood.freeze
-        end
-      }}
+    !cells.flatten.include?(VAPOR)
   end
 end
 
@@ -58,30 +56,70 @@ class Neighborhood
   attr_reader :x, :y, :grid
 
   def xys
-    [[x,y], [x+1,y], [x,y+1], [x+1,y+1]]
+    [[x, y], [x+1, y], [x+1, y+1], [x, y+1]]
   end
 
   def has_frost?
     xys.any? do |x, y|
-      grid[y][x] == FROST
+      grid[x, y] == FROST
     end
   end
 
   def freeze
     xys.each do |x, y|
-      if grid[y][x] == VAPOR
-        grid[y][x] = FROST
+      if grid[x, y] == VAPOR 
+        grid[x, y] = FROST
       end
     end
   end
+  
+  def rotate
+    tos = xys
+    if rand(2) == 0   #clockwise rotation
+      tos << tos.shift
+    else              #count-clockwise rotation
+      tos.unshift(tos.pop)
+    end
+    cels = xys.map { |x, y| grid[x, y] }
+    cels.zip(tos) { |cell, (x, y)| grid[x, y] = cell }
+  end
 end
 
-rows, cols = IO.console.winsize
-screen = Grid.new(rows, cols)
+class Simulation
+  def initialize(*args)
+    @grid = Grid.new(*args)
+    @tick_count = 1 
+  end
 
-until screen.frozen?
-  puts screen
-  screen.tick
-  sleep 1
+  attr_reader :grid
+
+  def tick
+    ys = (0...grid.rows)
+    xs = (0...grid.cols)
+    if @tick_count.even?
+      ys = Range.new(ys.begin - 1, ys.end - 1, ys.exclude_end?)
+      xs = Range.new(xs.begin - 1, xs.end - 1, xs.exclude_end?)
+    end
+    ys.step(2) { |y| 
+      xs.step(2) { |x|
+        neighborhood = Neighborhood.new(x, y, grid)
+        if neighborhood.has_frost?
+          neighborhood.freeze
+        else
+          neighborhood.rotate
+        end
+      }}
+    @tick_count += 1
+  end
+
+  def run
+    until grid.frozen?
+      puts grid
+      tick
+      sleep 0.3
+    end
+    puts grid
+  end
 end
 
+Simulation.new(*IO.console.winsize).run
