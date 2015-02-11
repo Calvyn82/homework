@@ -44,8 +44,10 @@ class Path
     squares.join(", ")
   end
 
-  def grow
-    squares.last.moves.map { |move| Path.new(*squares, move) }
+  def grow(exclusions)
+    squares.last.moves
+      .map { |move| Path.new(*squares, move) }
+      .reject { |path| exclusions.any? { |exclusion| path.ends_at?(exclusion) } }
   end
 
   def ends_at?(square)
@@ -54,22 +56,24 @@ class Path
 end
 
 class Pathfinder
-  def initialize(start, finish)
+  def initialize(start, finish, exclusions)
     @start  = Square.new(start)
     @finish = Square.new(finish)
+    @exclusions = exclusions.map { |string| Square.new(string) }
   end
 
-  attr_reader :start, :finish
+  attr_reader :start, :finish, :exclusions
 
   def solve
     walk    = [Path.new(start)]
-    while !walk.any? { |path| path.ends_at?(finish) }
-      walk = walk.flat_map { |path| path.grow }
+    until walk.any? { |path| path.ends_at?(finish) } || walk.empty?
+      walk = walk.flat_map { |path| path.grow(exclusions) }
     end
-    return walk.find { |path| path.ends_at?(finish) }
+    return walk.find { |path| path.ends_at?(finish) } || "No available solution."
   end
 end
 
 start   = ARGV[0]
 finish  = ARGV[1]
-puts Pathfinder.new(start, finish).solve
+exclusions = ARGV.drop(2)
+puts Pathfinder.new(start, finish, exclusions).solve
