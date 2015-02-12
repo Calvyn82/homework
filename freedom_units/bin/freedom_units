@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/freedom_units"
+
+puts FreedomUnits::Converter.new(ARGV.first).convert
