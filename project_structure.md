@@ -30,9 +30,11 @@ The file `bin/my_project`:
 
 Three key points:
 
-1. Has _Shenbang_ line telling this OS what kind of code this is
+1. Has _Shabang_ line telling this OS what kind of code this is
 2. Loads code from `lib/`
 3. Setups up and starts the code (usually one line)
+
+make executable with `chmod +x bin/my_project`
 
 ## Library Code
 
