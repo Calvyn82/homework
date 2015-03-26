@@ -79,3 +79,6 @@ opossum
 
 Is your animal a game bird?
 bobwhite quail
+
+Does your animal purr?
+cat

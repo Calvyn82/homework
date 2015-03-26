@@ -9,3 +9,4 @@ dalmatian
 cow
 siamese cat
 bat
+cat

@@ -2,3 +2,4 @@ mouse
 rabbit
 monkey
 cane toad
+cat
