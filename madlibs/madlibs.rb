@@ -6,11 +6,11 @@ class Questions
   attr_reader :filename
 
   def load
-    file = File.read(filename)
+    file = File.read(filename).gsub("\n", " ")
     match = file.scan(/\(\([^)]*\)\)/)
     return match
   end
 end
 
 data = Questions.new("lunch.txt")
-puts data.load
+p data.load
