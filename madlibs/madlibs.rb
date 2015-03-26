@@ -1,16 +1,33 @@
 class Questions
   def initialize(filename)
     @filename   = filename
+    @text = nil
   end
 
-  attr_reader :filename
+  attr_reader :filename, :text
 
   def load
     file = File.read(filename).gsub("\n", " ")
-    match = file.scan(/\(\([^)]*\)\)/)
-    return match
+    @text = file.scan(/\(\([^)]*\)\)/)
   end
 end
 
-data = Questions.new("lunch.txt")
-p data.load
+class Answers
+  def initialize(questions = Questions.new("lunch.txt"))
+    @questions = questions
+    @responses = [ ]
+  end
+
+  attr_reader :questions
+
+  def ask_for
+    puts "Here come the questions."
+    @questions.load.each do |question|
+      puts question
+      @responses << gets.strip
+    end
+    puts @responses
+  end
+end
+
+Answers.new.ask_for
