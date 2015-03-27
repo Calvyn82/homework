@@ -1,14 +1,15 @@
 class Questions
   def initialize(filename)
     @filename   = filename
-    @text = nil
+    @text       = nil
+    @madlibs    = nil
   end
 
-  attr_reader :filename, :text
+  attr_reader :filename, :text, :madlibs
 
   def load
-    file = File.read(filename).gsub("\n", " ")
-    @text = file.scan(/\(\([^)]*\)\)/)
+    @text     = File.read(filename).gsub("\n", " ")
+    @madlibs  = @text.scan(/\(\([^)]*\)\)/)
   end
 end
 
@@ -18,10 +19,10 @@ class Answers
     @responses = [ ]
   end
 
-  attr_reader :questions
+  attr_reader :questions, :responses
 
   def ask_for
-    puts "Here come the questions."
+    puts "Here come the madlibs."
     @questions.load.each do |question|
       puts question
       @responses << gets.strip
