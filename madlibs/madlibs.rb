@@ -7,28 +7,51 @@ class Questions
 
   attr_reader :filename, :text, :madlibs
 
-  def load
-    @text     = File.read(filename).gsub("\n", " ")
-    @madlibs  = @text.scan(/\(\([^)]*\)\)/)
+  def load_text
+    @text = File.read(filename).gsub("\n", " ")
+  end
+
+  def load_madlibs
+    @madlibs = @text.scan(/\(\([^)]*\)\)/)
   end
 end
 
 class Answers
   def initialize(questions = Questions.new("lunch.txt"))
-    @questions = questions
-    @responses = [ ]
+    @questions  = questions
+    @responses  = [ ]
+    @text       = questions.load_text
   end
 
-  attr_reader :questions, :responses
+  attr_reader :questions, :responses, :text
 
   def ask_for
     puts "Here come the madlibs."
-    @questions.load.each do |question|
+    @questions.load_madlibs.each do |question|
       puts question
       @responses << gets.strip
     end
-    puts @responses
+  end
+
+  def swap_in
+    responses.each_index do |i|
+      @text.sub!(/\(\([^)]*\)\)/, responses[i])
+    end
   end
 end
 
-Answers.new.ask_for
+class Madlibs
+  def initialize(answers = Answers.new)
+    @answers = answers
+  end
+
+  attr_reader :answers
+
+  def run
+    answers.ask_for
+    answers.swap_in
+    puts answers.text
+  end
+end
+
+Madlibs.new.run
