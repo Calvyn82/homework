@@ -16,7 +16,7 @@ class Questions
 end
 
 class Answers
-  def initialize(questions = Questions.new("lunch.txt"))
+  def initialize(questions = Questions.new("gift.txt"))
     @questions  = questions
     @responses  = [ ]
     @text       = questions.load_text
@@ -54,14 +54,36 @@ end
 class Madlibs
   def initialize(answers = Answers.new)
     @answers = answers
+    @wrapped = nil
   end
 
-  attr_reader :answers
+  attr_reader :answers, :wrapped
+
+  def word_wrap(width = 78)
+    # adapted from Ruby Cookbook 
+    # (https://www.safaribooksonline.com/library/view/ruby-cookbook/0596523696/ch01s15.html)
+    lines = []
+    line = ""
+    string = @answers.text
+    string.split(/\s+/).each do |word|
+      if line.size + word.size >= width
+        lines << line
+        line = word
+      elsif line.empty?
+        line = word
+      else
+        line << " " << word
+      end
+    end
+    lines << line if line
+    @wrapped = lines.join "\n"
+  end
 
   def run
     answers.ask_for
     answers.swap_in
-    puts answers.text
+    word_wrap
+    puts wrapped
   end
 end
 
