@@ -1,3 +1,5 @@
+WIDTH = 78
+
 class Questions
   def initialize(filename)
     @filename   = filename
@@ -26,22 +28,29 @@ class Answers
   attr_reader :questions, :responses, :text, :marked
 
   def ask_for
-    puts "Here come the madlibs."
     @questions.load_madlibs.each do |question|
       query = question.match(/([^(].*[^)])/)
       if query[1].include?(":")
-        save = query[1].match(/\A(.+):/)
-        puts question
-        answer = gets.strip
-        @marked[save[1]] = answer
-        @responses << answer
+        set_mark(query, question)
       elsif @marked.has_key?(query[1])
         @responses << @marked[query[1]]
       else
-        puts question
-        @responses << gets.strip
+        get_response(question)
       end
     end
+  end
+
+  def get_response(question)
+    puts question
+    @responses << gets.strip
+  end
+
+  def set_mark(query, question)
+    save = query[1].match(/\A(.+):/)
+    puts question
+    answer = gets.strip
+    @marked[save[1]] = answer
+    @responses << answer
   end
 
   def swap_in
@@ -53,37 +62,40 @@ end
 
 class Madlibs
   def initialize(answers = Answers.new)
-    @answers = answers
-    @wrapped = nil
+    @answers  = answers
+    @lines    = [ ]
+    @line     = ""
   end
 
-  attr_reader :answers, :wrapped
+  attr_reader :answers, :lines, :line
 
-  def word_wrap(width = 78)
+  def word_wrap
     # adapted from Ruby Cookbook 
     # (https://www.safaribooksonline.com/library/view/ruby-cookbook/0596523696/ch01s15.html)
-    lines = []
-    line = ""
-    string = @answers.text
-    string.split(/\s+/).each do |word|
-      if line.size + word.size >= width
-        lines << line
-        line = word
-      elsif line.empty?
-        line = word
-      else
-        line << " " << word
-      end
+    @answers.text.split(/\s+/).each do |word|
+      build_lines(word)
     end
-    lines << line if line
-    @wrapped = lines.join "\n"
+    @lines << @line if @line
+    @lines.join "\n"
+  end
+
+  def build_lines(word)
+    if @line.size + word.size >= WIDTH
+      @lines << @line
+      @line = word
+    elsif @line.empty?
+      @line = word
+    else
+      @line << " " << word
+    end
   end
 
   def run
+    puts "Here come the madlibs."
     answers.ask_for
     answers.swap_in
     word_wrap
-    puts wrapped
+    puts lines
   end
 end
 
