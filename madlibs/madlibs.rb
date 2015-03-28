@@ -16,7 +16,7 @@ class Questions
 end
 
 class Answers
-  def initialize(questions = Questions.new("gift.txt"))
+  def initialize(questions = Questions.new("lunch.txt"))
     @questions  = questions
     @responses  = [ ]
     @text       = questions.load_text
@@ -29,7 +29,6 @@ class Answers
     puts "Here come the madlibs."
     @questions.load_madlibs.each do |question|
       query = question.match(/([^(].*[^)])/)
-      p query[1]
       if query[1].include?(":")
         save = query[1].match(/\A(.+):/)
         puts question
