@@ -69,24 +69,16 @@ class Madlibs
 
   attr_reader :answers, :lines, :line
 
-  def word_wrap
-    # adapted from Ruby Cookbook 
-    # (https://www.safaribooksonline.com/library/view/ruby-cookbook/0596523696/ch01s15.html)
-    @answers.text.split(/\s+/).each do |word|
-      build_lines(word)
-    end
-    @lines << @line if @line
-    @lines.join "\n"
-  end
-
-  def build_lines(word)
-    if @line.size + word.size >= WIDTH
-      @lines << @line
-      @line = word
-    elsif @line.empty?
-      @line = word
-    else
-      @line << " " << word
+  def wrap(string, width = WIDTH)
+    loop do
+      return string unless string.sub!(/^.{#{width + 1}}/) { |long_line|
+        if (i = long_line.rindex(" "))
+          long_line[i, 1] = "\n"
+        else
+          ling_line[-1, 0] = "\n"
+        end
+        long_line
+      }
     end
   end
 
@@ -94,8 +86,7 @@ class Madlibs
     puts "Here come the madlibs."
     answers.ask_for
     answers.swap_in
-    word_wrap
-    puts lines
+    puts wrap(answers.text)
   end
 end
 
