@@ -1,5 +1,5 @@
 $(function() {
-  $('button').on('click', function() {
-    $('img').attr('src', 'Splode.jpg'); 
+  $('input#button').on('click', function() {
+    $('img#do-it').attr('src', 'Splode.jpg'); 
   });
 });
