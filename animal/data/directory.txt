@@ -29,3 +29,5 @@ bat
 opossum
 bobwhite quail
 cat
+flying squirrel
+flying squirrel

@@ -2,3 +2,4 @@ shih-tzu
 beagle
 dalmatian
 siamese cat
+flying squirrel

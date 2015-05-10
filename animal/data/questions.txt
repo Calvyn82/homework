@@ -82,3 +82,6 @@ bobwhite quail
 
 Does your animal purr?
 cat
+
+Is it a mammal?
+flying squirrel

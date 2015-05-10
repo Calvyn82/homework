@@ -10,3 +10,5 @@ cow
 siamese cat
 bat
 cat
+flying squirrel
+flying squirrel

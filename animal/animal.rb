@@ -209,7 +209,6 @@ animals         = animals.pull("animal")
 master_list     = animals.dup
 table           = Builder.new
 table           = table.run
-p table
 master_tables   = Builder.new
 master_tables   = master_tables.tag_questions(table)
 guess           = Runner.new(animals, master_list, table, master_tables)

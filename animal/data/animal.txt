@@ -26,3 +26,4 @@ blue whale
 bat
 opossum
 bobwhite quail
+flying squirrel
