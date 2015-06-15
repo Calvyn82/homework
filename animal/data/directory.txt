@@ -31,3 +31,6 @@ bobwhite quail
 cat
 flying squirrel
 flying squirrel
+leopard
+bird
+zebra

@@ -9,3 +9,5 @@ bald eagle
 blue whale
 opossum
 bobwhite quail
+leopard
+zebra

@@ -85,3 +85,12 @@ cat
 
 Is it a mammal?
 flying squirrel
+
+Does your animal have cubs?
+leopard
+
+Does your animal lay eggs?
+bird
+
+Does your animal have stripes?
+zebra

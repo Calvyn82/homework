@@ -27,3 +27,5 @@ bat
 opossum
 bobwhite quail
 flying squirrel
+leopard
+zebra
