@@ -2,9 +2,11 @@ module Cipher
   class Encryptor
     def initialize(statement)
       @statement = statement
+      @deck      = Array.new(52)
     end
 
     attr_reader :statement
+    private     :statement
 
     def prepare
       discard_non_letters
@@ -37,6 +39,12 @@ module Cipher
       statement.each_slice(5) { |group| separated << group + [" "] }
       @statement = separated
       @statement = statement.join.strip
+    end
+
+    def build_deck
+      @deck.fill { |i| (i + 1).to_s }
+      @deck << "A"
+      @deck << "B"
     end
   end
 end
