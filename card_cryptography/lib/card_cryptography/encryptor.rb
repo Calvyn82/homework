@@ -11,7 +11,6 @@ module Cipher
       all_caps_string
       append_xtra
       space_insertion
-      return statement
     end
 
     def discard_non_letters
