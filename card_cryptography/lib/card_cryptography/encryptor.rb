@@ -8,13 +8,6 @@ module Cipher
     attr_reader :statement
     private     :statement
 
-    def prepare
-      discard_non_letters
-      all_caps_string
-      append_xtra
-      space_insertion
-    end
-
     def discard_non_letters
       @statement = statement
         .chars
@@ -22,18 +15,21 @@ module Cipher
     end
 
     def all_caps_string
+      discard_non_letters
       @statement = statement
         .join
         .upcase
     end
 
     def append_xtra
+      all_caps_string
       if statement.length % 5 != 0
         @statement << "X" * (5 - statement.length % 5)
       end
     end
 
     def space_insertion
+      append_xtra
       separated = [ ]
       @statement = statement.chars
       statement.each_slice(5) { |group| separated << group + [" "] }
