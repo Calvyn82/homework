@@ -54,4 +54,18 @@ describe Cipher::Deck do
     deck = Cipher::Deck.new(shuffle: false)
     expect(deck.count_cut).to eq([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, "A", "B", 1])
   end
+
+  it "gets an output card" do
+    deck = Cipher::Deck.new(shuffle: false)
+    expect(deck.output_card).to eq(4)
+  end
+
+  it "can run multiple output card cycles" do
+    deck = Cipher::Deck.new(shuffle: false)
+    cards = [ ]
+    until cards.size == 10
+      cards << deck.output_card
+    end
+    expect(cards).to eq([4, 49, 10, 24, 8, 44, 4, 33, 20, 39])
+  end
 end

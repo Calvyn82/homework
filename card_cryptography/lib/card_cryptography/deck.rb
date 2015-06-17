@@ -18,7 +18,9 @@ module Cipher
     end
 
     def move_a_joker
-      build
+      if @cards == Array.new(52)
+        build
+      end
       start = cards.index("A")
       if cards[-1] == "A"
         @cards.pop.unshift("A")
@@ -54,12 +56,25 @@ module Cipher
     def count_cut
       triple_cut
       last_card = cards[-1]
-      to_move = @cards[0..(cards[-1] - 1)]
-      @cards.delete_if { |card| to_move.include?(card) }
+      move_list = @cards[0..(cards[-1] - 1)]
+      @cards.delete_if { |card| move_list.include?(card) }
       @cards.delete(last_card)
-      @cards << to_move
+      @cards << move_list
       @cards << last_card
       @cards.flatten!
+    end
+
+    def output_card
+      count_cut
+      if cards.first != "A" && cards.first != "B"
+        if cards[cards.first] != "A" && cards[cards.first] != "B"
+          return cards[cards.first]
+        else
+          output_card
+        end
+      else
+        output_card
+      end
     end
 
     private
