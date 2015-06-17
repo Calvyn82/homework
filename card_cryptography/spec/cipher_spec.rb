@@ -28,24 +28,30 @@ describe Cipher::Encryptor do
   end
 end
 
+
 describe Cipher::Deck do
   it "has a deck of 54 cards with an 'A' joker and a 'B' joker" do
-    deck = Cipher::Deck.new
+    deck = Cipher::Deck.new(shuffle: false)
     expect(deck.build).to eq([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, "A", "B"])
   end
 
   it "moves the 'A' joker down one card" do
-    deck = Cipher::Deck.new
+    deck = Cipher::Deck.new(shuffle: false)
     expect(deck.move_a_joker).to eq([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, "B", "A"])
   end
 
   it "moves the 'B' joker down two cards" do
-    deck = Cipher::Deck.new
+    deck = Cipher::Deck.new(shuffle: false)
     expect(deck.move_b_joker).to eq([1, "B", 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, "A"])
   end
 
   it "performs a triple cut" do
-    deck = Cipher::Deck.new
+    deck = Cipher::Deck.new(shuffle: false)
     expect(deck.triple_cut).to eq(["B", 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, "A", 1])
+  end
+
+  it "performs a count cut using the value of the bottom card" do
+    deck = Cipher::Deck.new(shuffle: false)
+    expect(deck.count_cut).to eq([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, "A", "B", 1])
   end
 end

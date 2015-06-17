@@ -4,7 +4,7 @@ module Cipher
   class Encryptor
     def initialize(statement)
       @statement = statement
-      @deck      = Deck.new.build
+      @deck      = Deck.new.count_cut
     end
 
     attr_reader :statement, :deck

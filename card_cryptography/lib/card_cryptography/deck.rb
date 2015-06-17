@@ -1,12 +1,13 @@
 module Cipher
   class Deck
-    def initialize
-      @cards = Array.new(52)
+    def initialize(shuffle: false)
+      @cards   = Array.new(52)
+      @shuffle = shuffle
     end
-    attr_reader :cards
-    private     :cards
+    attr_reader :cards, :shuffle
+    private     :cards, :shuffle
 
-    def build(shuffle = false)
+    def build
       @cards.fill { |i| (i + 1) }
       @cards << "A"
       @cards << "B"
@@ -47,6 +48,17 @@ module Cipher
       @cards.delete_if { |card| first_group.include?(card) || last_group.include?(card) }
       @cards.unshift(last_group)
       @cards << first_group
+      @cards.flatten!
+    end
+
+    def count_cut
+      triple_cut
+      last_card = cards[-1]
+      to_move = @cards[0..(cards[-1] - 1)]
+      @cards.delete_if { |card| to_move.include?(card) }
+      @cards.delete(last_card)
+      @cards << to_move
+      @cards << last_card
       @cards.flatten!
     end
 
