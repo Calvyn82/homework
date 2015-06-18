@@ -1,26 +1,15 @@
 module Cipher
   class Deck
     def initialize(shuffle: false)
-      @cards   = Array.new(52)
-      @shuffle = shuffle
-    end
-    attr_reader :cards, :shuffle
-    private     :cards, :shuffle
-
-    def build
-      @cards.fill { |i| (i + 1) }
-      @cards << "A"
-      @cards << "B"
+      @cards   = Array.new(52).fill { |i| i + 1 } + ["A", "B"]
       if shuffle
         @cards.shuffle!
       end
-      return cards
     end
+    attr_reader :cards
+    private     :cards
 
     def move_a_joker
-      if @cards == Array.new(52)
-        build
-      end
       start = cards.index("A")
       if cards[-1] == "A"
         @cards.pop.unshift("A")
