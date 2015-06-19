@@ -57,16 +57,6 @@ module Cipher
 
     private
 
-    def b_at_end
-      if cards[-1] == "B"
-        @cards.delete("B")
-        @cards.insert(2, "B")
-      else
-        @cards.delete("B")
-        @cards.insert(1, "B")
-      end
-    end
-
     def build_first_group
       if cards.index("A") < cards.index("B")
         first_group = cards[0..cards.index("A")]
