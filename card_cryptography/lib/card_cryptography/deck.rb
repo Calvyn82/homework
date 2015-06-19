@@ -13,11 +13,7 @@ module Cipher
       start = cards.index(letter)
       if cards[(-distance)..-1].include?(letter)
         @cards.delete(letter)
-        if letter == "A"
-          @cards.insert(start - 52, "A")
-        else
-          @cards.insert(start - 51, "B")
-        end
+        @cards.insert((start - (53 - distance)), letter)
       else
         @cards.delete(letter)
         @cards.insert((start + distance), letter)
