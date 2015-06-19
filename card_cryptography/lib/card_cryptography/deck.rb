@@ -9,31 +9,20 @@ module Cipher
     attr_reader :cards
     private     :cards
 
-    def move_a_joker
-      start = cards.index("A")
-      if cards[-1] == "A"
-        @cards.pop.unshift("A")
+    def move_joker(letter: letter, distance: distance)
+      start = cards.index(letter)
+      if cards[(-distance)..-1].include?(letter)
+        @cards.delete(letter)
+        @cards.insert((55 - distance) - start, letter)
       else
-        @cards.delete("A")
-        @cards.insert((start + 1), "A")
+        @cards.delete(letter)
+        @cards.insert((start + distance), letter)
       end
-      return cards
-    end
-
-    def move_b_joker
-      move_a_joker
-      start = cards.index("B")
-      if cards[-2..-1].include?("B")
-        b_at_end
-      else
-        @cards.delete("B")
-        @cards.insert((start + 2), "B")
-      end
-      return cards
     end
 
     def triple_cut
-      move_b_joker
+      move_joker(letter: "A", distance: 1)
+      move_joker(letter: "B", distance: 2)
       first_group = build_first_group
       last_group  = build_last_group
       @cards.delete_if { |card| first_group.include?(card) || last_group.include?(card) }

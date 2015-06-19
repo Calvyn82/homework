@@ -37,14 +37,15 @@ describe Cipher::Deck do
 
   it "moves the 'A' joker down one card" do
     deck = Cipher::Deck.new(shuffle: false)
-    deck.move_a_joker
+    deck.move_joker(letter: "A", distance: 1) 
     expect(deck.send(:cards).index("A")).to eq(53)
   end
 
   it "moves the 'B' joker down two cards" do
     deck = Cipher::Deck.new(shuffle: false)
-    deck.move_b_joker
-    expect(deck.send(:cards).index("B")).to eq (1)
+    deck.move_joker(letter: "A", distance: 1) 
+    deck.move_joker(letter: "B", distance: 2)
+    expect(deck.send(:cards).index("B")).to eq(1)
   end
 
   it "performs a triple cut" do
