@@ -9,7 +9,7 @@ module Cipher
     attr_reader :cards
     private     :cards
 
-    def move_joker(letter: letter, distance: distance)
+    def move_joker(letter:, distance:)
       start = cards.index(letter)
       if cards[(-distance)..-1].include?(letter)
         @cards.delete(letter)
