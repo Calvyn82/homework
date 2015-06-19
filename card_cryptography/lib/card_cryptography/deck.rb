@@ -26,15 +26,11 @@ module Cipher
       first_group = cards.take_while { |card| 
         cards.index(card) < cards.index("A") && cards.index(card) < cards.index("B") }
       last_group  = [ ]
-      cards.each_with_index do |card, i|
-        if i > cards.index("A") && i > cards.index("B")
-          last_group << card
-        end
-      end
-      @cards.delete_if { |card| first_group.include?(card) || last_group.include?(card) }
-      @cards.unshift(last_group)
-      @cards << first_group
-      @cards.flatten!
+      cards.each_with_index { |card, i| 
+        last_group << card if i > cards.index("A") && i > cards.index("B")}
+      @cards = (cards - (first_group + last_group)).unshift(last_group)
+        .concat(first_group)
+        .flatten!
     end
 
     def count_cut
