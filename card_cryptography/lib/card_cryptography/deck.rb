@@ -23,8 +23,14 @@ module Cipher
     def triple_cut
       move_joker(letter: "A", distance: 1)
       move_joker(letter: "B", distance: 2)
-      first_group = build_first_group
-      last_group  = build_last_group
+      first_group = cards.take_while { |card| 
+        cards.index(card) < cards.index("A") && cards.index(card) < cards.index("B") }
+      last_group  = [ ]
+      cards.each_with_index do |card, i|
+        if i > cards.index("A") && i > cards.index("B")
+          last_group << card
+        end
+      end
       @cards.delete_if { |card| first_group.include?(card) || last_group.include?(card) }
       @cards.unshift(last_group)
       @cards << first_group
@@ -53,30 +59,6 @@ module Cipher
       else
         output_card
       end
-    end
-
-    private
-
-    def build_first_group
-      if cards.index("A") < cards.index("B")
-        first_group = cards[0..cards.index("A")]
-        first_group.delete("A")
-      else
-        first_group = cards[0..cards.index("B")]
-        first_group.delete("B")
-      end
-      first_group
-    end
-
-    def build_last_group
-      if cards.index("A") > cards.index("B")
-        last_group = cards[cards.index("A")..-1]
-        last_group.delete("A")
-      else
-        last_group = cards[cards.index("B")..-1]
-        last_group.delete("B")
-      end
-      last_group
     end
   end
 end
