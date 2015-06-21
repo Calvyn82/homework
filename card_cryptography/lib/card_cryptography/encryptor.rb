@@ -44,6 +44,5 @@ module Cipher
       }
           .strip
     end
-
   end
 end

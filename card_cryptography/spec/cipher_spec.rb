@@ -26,6 +26,10 @@ describe Cipher::Encryptor do
     statement = Cipher::Encryptor.new("Code in Ruby, live longer!")
     expect(statement.convert_to_numbers).to eq("3 15 4 5 9  14 18 21 2 25  12 9 22 5 12  15 14 7 5 18")
   end
+
+  it "gets keystream letters" do
+    statement = Cipher::Encryptor.new("Code in Ruby, live longer!")
+  end
 end
 
 
@@ -71,6 +75,6 @@ describe Cipher::Deck do
     until cards.size == 10
       cards << deck.output_card
     end
-    expect(cards).to eq([4, 49, 10, 24, 8, 44, 4, 33, 20, 39])
+    expect(cards).to eq([4, 23, 10, 24, 8, 18, 6, 4, 7, 20])
   end
 end

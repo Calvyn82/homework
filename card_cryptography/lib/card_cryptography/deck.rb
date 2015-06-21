@@ -44,15 +44,30 @@ module Cipher
 
     def output_card
       count_cut
-      if cards.first != "A" && cards.first != "B"
-        if cards[cards.first] != "A" && cards[cards.first] != "B"
-          return cards[cards.first]
-        else
+      if cards.first == "A"
+        if cards[53] == "B"
           output_card
+        else
+          return convert_down_output(cards[53])
         end
-      else
+      elsif cards.first == "B"
         output_card
+      else
+        if cards[cards.first] == "B" || cards[cards.first] == "A"
+          output_card
+        else
+          return convert_down_output(cards[cards.first])
+        end
       end
+    end
+
+    private
+
+    def convert_down_output(card)
+      if card > 26
+        card = card - 26
+      end
+      card
     end
   end
 end
