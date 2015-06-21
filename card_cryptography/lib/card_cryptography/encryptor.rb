@@ -3,12 +3,13 @@ require_relative "deck"
 module Cipher
   class Encryptor
     def initialize(statement)
-      @statement = statement
-      @deck      = Deck.new
+      @statement     = statement
+      @deck          = Deck.new
+      @encrytion     = nil
     end
 
-    attr_reader :statement, :deck
-    private     :statement, :deck
+    attr_reader :statement, :deck, :encryption, :starting_deck
+    private     :statement, :deck, :encryption, :starting_deck
 
     def discard_non_letters
       @statement = statement
@@ -33,8 +34,7 @@ module Cipher
       separated = [ ]
       @statement = statement.chars
       statement.each_slice(5) { |group| separated << group + [" "] }
-      @statement = separated
-      @statement = statement.join.strip
+      @statement = separated.join.strip
     end
 
     def convert_to_numbers
@@ -56,15 +56,29 @@ module Cipher
 
     def encrypt_numbers
       keystream  = generate_keystream
-      encryption = statement.split(" ").map { |letter| letter.to_i }
+      @encryption = statement.split(" ").map { |num| num.to_i }
         .zip(keystream).map { |pair| pair.reduce(:+) }
-      encryption.map do |number| 
+      @encryption = encryption.map do |number| 
         if number > 26
           number - 26
         else
           number
         end
       end
+    end
+
+    def convert_to_letters
+      alphabet = ("A".."Z").to_a
+      @encryption = encryption.map { |number| alphabet[number - 1] }
+    end
+
+    def encrypt_message
+      groups = [ ]
+      convert_to_numbers
+      encrypt_numbers
+      convert_to_letters
+      encryption.each_slice(5) { |group| groups << group + [" "] }
+      @encryption = groups.join.strip
     end
   end
 end
