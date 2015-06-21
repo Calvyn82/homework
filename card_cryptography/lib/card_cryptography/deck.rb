@@ -1,7 +1,7 @@
 module Cipher
   class Deck
     def initialize(shuffle: false)
-      @cards   = Array.new(52).fill { |i| i + 1 } + ["A", "B"]
+      @cards = (1..52).to_a + ["A", "B"]
       if shuffle
         @cards.shuffle!
       end
@@ -45,11 +45,7 @@ module Cipher
     def output_card
       count_cut
       if cards.first == "A" || cards.first == "B"
-        if cards[53] == "B" || cards[53] == "B"
-          output_card
-        else
-          return convert_down_output(cards[53])
-        end
+        return check_if_joker
       else
         if cards[cards.first] == "B" || cards[cards.first] == "A"
           output_card
@@ -66,6 +62,14 @@ module Cipher
         card = card - 26
       end
       card
+    end
+
+    def check_if_joker
+      if cards[53] == "A" || cards[53] == "B"
+        output_card
+      else
+        return convert_down_output(cards[53])
+      end
     end
   end
 end
