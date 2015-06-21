@@ -45,32 +45,5 @@ module Cipher
           .strip
     end
 
-    def move_b_joker
-      move_a_joker
-      start = deck.index("B")
-      if deck[-2..-1].include?("B")
-        b_at_end
-      else
-        @deck.delete("B")
-        @deck.insert((start + 2), "B")
-      end
-      return deck
-    end
-
-    def triple_cut
-      move_b_joker
-    end
-
-    private
-
-    def b_at_end
-      if deck[-1] == "B"
-        @deck.delete("B")
-        @deck.insert(2, "B")
-      else
-        @deck.delete("B")
-        @deck.insert(1, "B")
-      end
-    end
   end
 end
