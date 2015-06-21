@@ -35,12 +35,10 @@ module Cipher
 
     def count_cut
       triple_cut
-      last_card = cards[-1]
+      last_card = [cards[-1]]
       move_list = @cards[0..(cards[-1] - 1)]
-      @cards.delete_if { |card| move_list.include?(card) }
-      @cards.delete(last_card)
-      @cards << move_list
-      @cards << last_card
+      @cards = cards - (move_list + last_card)
+      @cards << (move_list + last_card)
       @cards.flatten!
     end
 
