@@ -29,6 +29,14 @@ describe Cipher::Encryptor do
 
   it "gets keystream letters" do
     statement = Cipher::Encryptor.new("Code in Ruby, live longer!")
+    statement.convert_to_numbers
+    expect(statement.generate_keystream).to eq([4, 23, 10, 24, 8, 25, 18, 6, 4, 7, 20, 13, 19, 8, 16, 21, 21, 18, 24, 10])
+  end
+
+  it "adds the converted message and the keystream" do
+    statement = Cipher::Encryptor.new("Code in Ruby, live longer!")
+    statement.convert_to_numbers
+    expect(statement.encrypt_numbers).to eq([7, 12, 14, 3, 17, 13, 10, 1, 6, 6, 6, 22, 15, 13, 2, 10, 9, 25, 3, 2])
   end
 end
 

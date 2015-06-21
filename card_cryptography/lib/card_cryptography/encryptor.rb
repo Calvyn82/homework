@@ -4,7 +4,7 @@ module Cipher
   class Encryptor
     def initialize(statement)
       @statement = statement
-      @deck      = Deck.new.count_cut
+      @deck      = Deck.new
     end
 
     attr_reader :statement, :deck
@@ -39,10 +39,32 @@ module Cipher
 
     def convert_to_numbers
       space_insertion
-      @statement.gsub(/[A-Z]/) { |letter| 
+      @statement.gsub!(/[A-Z]/) { |letter| 
         ((letter.ord - "A".ord) + 1).to_s + " "  
       }
           .strip
+    end
+
+    def generate_keystream
+      message_numbers = statement.split(" ")
+      keystream       = [ ]
+      message_numbers.size.times do
+        keystream << @deck.output_card
+      end
+      keystream
+    end
+
+    def encrypt_numbers
+      keystream  = generate_keystream
+      encryption = statement.split(" ").map { |letter| letter.to_i }
+        .zip(keystream).map { |pair| pair.reduce(:+) }
+      encryption.map do |number| 
+        if number > 26
+          number - 26
+        else
+          number
+        end
+      end
     end
   end
 end
