@@ -148,4 +148,3 @@ describe Cipher::Deck do
     expect(cards).to eq([4, 23, 10, 24, 8, 25, 18, 6, 4, 7])
   end
 end
-
