@@ -75,6 +75,6 @@ describe Cipher::Deck do
     until cards.size == 10
       cards << deck.output_card
     end
-    expect(cards).to eq([4, 23, 10, 24, 8, 18, 6, 4, 7, 20])
+    expect(cards).to eq([4, 23, 10, 24, 8, 25, 18, 6, 4, 7])
   end
 end
