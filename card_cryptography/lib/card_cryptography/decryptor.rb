@@ -29,8 +29,8 @@ module Cipher
     end
 
     def decrypt_message
+      setup
       groups = [ ]
-      convert_to_numbers
       decrypt_numbers
       convert_to_letters
       cryption.each_slice(5) { |group| groups << group + [" "] }

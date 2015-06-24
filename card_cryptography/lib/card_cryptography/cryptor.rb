@@ -15,19 +15,16 @@ module Cipher
     end
 
     def all_caps_string
-      discard_non_letters
       @statement = statement
         .join
         .upcase
     end
 
     def append_xtra
-      all_caps_string
       @statement << "X" * ((5 - statement.length % 5) % 5)
     end
 
     def space_insertion
-      append_xtra
       separated = [ ]
       @statement = statement.chars
       statement.each_slice(5) { |group| separated << group + [" "] }
@@ -35,11 +32,18 @@ module Cipher
     end
 
     def convert_to_numbers
-      space_insertion
       @statement.gsub!(/[A-Z]/) { |letter|
         ((letter.ord - "A".ord) + 1).to_s + " "
       }
-        .strip
+        .strip!
+    end
+
+    def setup
+      discard_non_letters
+      all_caps_string
+      append_xtra
+      space_insertion
+      convert_to_numbers
     end
 
     def generate_keystream

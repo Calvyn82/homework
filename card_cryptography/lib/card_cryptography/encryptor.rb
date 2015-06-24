@@ -32,7 +32,7 @@ module Cipher
 
     def encrypt_message
       groups = [ ]
-      convert_to_numbers
+      setup
       encrypt_numbers
       convert_to_letters
       encryption.each_slice(5) { |group| groups << group + [" "] }

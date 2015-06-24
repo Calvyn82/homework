@@ -7,28 +7,33 @@ describe Cipher::Cryptor do
   end
 
   it "creates an all-caps string" do
-    statement = Cipher::Cryptor.new("Code in Ruby, live longer!")
+    statement = Cipher::Cryptor.new(["C", "o", "d", "e", "i", "n", "R", "u", "b", "y", "l", "i", "v", "e", "l", "o", "n", "g", "e", "r"])
     expect(statement.all_caps_string).to eq("CODEINRUBYLIVELONGER")
   end
 
   it "appends any needed X's" do
-    statement = Cipher::Cryptor.new("Code in Ruby, be happy")
+    statement = Cipher::Cryptor.new("CODEINRUBYBEHAPPY")
     expect(statement.append_xtra).to eq("CODEINRUBYBEHAPPYXXX")
   end
 
   it "inserts a space between every fifth letter" do
-    statement = Cipher::Cryptor.new("Code in Ruby, live longer!")
+    statement = Cipher::Cryptor.new("CODEINRUBYLIVELONGER")
     expect(statement.space_insertion).to eq ("CODEI NRUBY LIVEL ONGER")
   end
 
   it "converts message to numbers" do
-    statement = Cipher::Cryptor.new("Code in Ruby, live longer!")
+    statement = Cipher::Cryptor.new("CODEI NRUBY LIVEL ONGER")
     expect(statement.convert_to_numbers).to eq("3 15 4 5 9  14 18 21 2 25  12 9 22 5 12  15 14 7 5 18")
+  end
+
+  it "sets up the message for encryption or decryption" do
+    statement = Cipher::Cryptor.new("Code in Ruby, live longer!")
+    expect(statement.setup).to eq("3 15 4 5 9  14 18 21 2 25  12 9 22 5 12  15 14 7 5 18")
   end
 
   it "gets keystream numbers" do
     statement = Cipher::Cryptor.new("Code in Ruby, live longer!")
-    statement.convert_to_numbers
+    statement.setup
     expect(statement.generate_keystream).to eq([4, 23, 10, 24, 8, 25, 18, 6, 4, 7, 20, 13, 19, 8, 16, 21, 21, 18, 24, 10])
   end
 end
