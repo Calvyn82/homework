@@ -1,5 +1,10 @@
 module Cipher
   class Cryptor
+    def initialize(statement)
+      @statement = statement
+      @deck      = (1..52).to_a + ["A", "B"]
+      @cryption  = nil
+    end
 
     attr_reader :statement, :deck, :cryption
 
