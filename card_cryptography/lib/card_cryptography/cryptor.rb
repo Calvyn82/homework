@@ -2,7 +2,7 @@ module Cipher
   class Cryptor
     def initialize(statement)
       @statement = statement
-      @deck      = (1..52).to_a + ["A", "B"]
+      @deck      = Deck.new
       @cryption  = nil
     end
 
